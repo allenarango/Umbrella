@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -27,6 +29,8 @@ import java.net.URL;
 public class Umbrella extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     protected GoogleApiClient mGoogleApiClient;
+    protected String latitude;
+    protected String longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +42,35 @@ public class Umbrella extends ActionBarActivity implements GoogleApiClient.Conne
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+
+        Button alarmButton = (Button) findViewById(R.id.button);
+        alarmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAlarm();
+            }
+        });
+
+
+        Button cancelAlarmButton = (Button) findViewById(R.id.button2);
+        cancelAlarmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelAlarm();
+            }
+        });
     }
+
+    protected void setAlarm() {
+        Alarm alarm = new Alarm();
+        alarm.setAlarm(this,latitude,longitude);
+    }
+
+    protected void cancelAlarm() {
+        Alarm alarm = new Alarm();
+        alarm.cancelAlarm(this,latitude,longitude);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
